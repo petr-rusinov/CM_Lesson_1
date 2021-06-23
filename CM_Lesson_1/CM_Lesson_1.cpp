@@ -1,6 +1,9 @@
 ﻿#include <iostream>
 #include <tuple>
 #include <optional>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
 using namespace std;
 
@@ -82,6 +85,11 @@ ostream& operator << (ostream& out, const PhoneNumber& pn)
 	return out;
 }
 
+bool operator <(const PhoneNumber& pn1, const PhoneNumber& pn2)
+{
+	return tie(pn1.countryCode, pn1.townCode, pn1.number, pn1.additionalNumber) < tie(pn2.countryCode, pn2.townCode, pn2.number, pn2.additionalNumber);
+}
+
 void task_2()
 {
 	PhoneNumber pn1 = { 7, 495, "1234567", 24 };
@@ -112,10 +120,47 @@ void task_2()
 // то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
 //
 
+class PhoneBook
+{
+private:
+	vector<pair<Person, PhoneNumber>> m_phoneBook;
+public:
+	PhoneBook() {}
+	PhoneBook(ifstream& ifs) {}
+	void sortByName()
+	{
+		sort(m_phoneBook.begin(), m_phoneBook.end());
+	}
+	void add(const Person& p, const PhoneNumber& pn)
+	{
+		pair<const Person&, const PhoneNumber&> pp(p, pn);
+		m_phoneBook.push_back(pp);
+	}
+};
 
+
+void task_3()
+{
+	Person person4 = { "Ivanov", "Ivan", "Ivanovich" };
+	Person person2 = { "Petrov", "Petr", "Petrovich" };
+	Person person1 = { "Vasilyev", "Vasiliy", "Vasilyevich" };
+	Person person3 = { "Ivanov", "Ivan", "Ivanovich" };
+	PhoneNumber pn1 = { 7, 495, "1234567", 24 };
+	PhoneNumber pn2 = { 7, 499, "2223344" };
+	PhoneNumber pn3 = { 7, 487, "2345566" };
+	PhoneNumber pn4 = { 7, 800, "5556600" };
+
+	PhoneBook pb;
+	pb.add(person1, pn1);
+	pb.add(person2, pn2);
+	pb.add(person3, pn3);
+	pb.add(person4, pn4);
+	pb.sortByName();
+}
 
 int main()
 {
 	task_1();
 	task_2();
+	task_3();
 }
