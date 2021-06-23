@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <tuple>
+#include <optional>
 
 using namespace std;
 
@@ -63,6 +64,32 @@ void task_1()
 // где 7 – это номер страны, 911 – номер города, 1234567 – номер, 12 – добавочный номер.
 // Если добавочного номера нет, то его выводить не надо.
 
+struct PhoneNumber
+{
+	int countryCode;
+	int townCode;
+	string number;
+	optional<int> additionalNumber;
+	friend ostream& operator << (ostream& out, const PhoneNumber& pn);
+};
+
+ostream& operator << (ostream& out, const PhoneNumber& pn)
+{
+	out << "+" << pn.countryCode << "(" << pn.townCode << ")" << pn.number;
+
+	if (pn.additionalNumber.has_value())
+		out << " "  << pn.additionalNumber.value();
+	return out;
+}
+
+void task_2()
+{
+	PhoneNumber pn1 = { 7, 495, "1234567", 24 };
+	PhoneNumber pn2 = { 7, 499, "2223344"};
+	cout << pn1 << endl;
+	cout << pn2 << endl;
+}
+
 // 3
 // Создайте класс PhoneBook, который будет в контейнере хранить пары : Человек – Номер телефона.
 // Конструктор этого класса должен принимать параметр типа ifstream – поток данных, полученных из файла.
@@ -90,5 +117,5 @@ void task_1()
 int main()
 {
 	task_1();
-
+	task_2();
 }
