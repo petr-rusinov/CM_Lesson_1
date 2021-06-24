@@ -119,7 +119,8 @@ void task_2()
 // Реализуйте метод ChangePhoneNumber, который принимает человека и новый номер телефона и, если находит заданного человека в контейнере, 
 // то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
 //
-
+bool compareByName(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) { return p1.first < p2.first; }
+bool compareByPhone(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) { return p1.second < p2.second; }
 class PhoneBook
 {
 private:
@@ -127,14 +128,35 @@ private:
 public:
 	PhoneBook() {}
 	PhoneBook(ifstream& ifs) {}
+	
 	void sortByName()
 	{
-		sort(m_phoneBook.begin(), m_phoneBook.end());
+		sort(m_phoneBook.begin(), m_phoneBook.end(), compareByName);
+	}
+	void sortByPhone()
+	{
+		sort(m_phoneBook.begin(), m_phoneBook.end(), compareByPhone);
+	}
+	string getPhoneNumber(const string& lastName)
+	{
+		return "";
+	}
+	void changePhoneNumber(const Person& p, const PhoneNumber& pn)
+	{
+
 	}
 	void add(const Person& p, const PhoneNumber& pn)
 	{
 		pair<const Person&, const PhoneNumber&> pp(p, pn);
 		m_phoneBook.push_back(pp);
+	}
+
+	void print()
+	{
+		for (pair<Person, PhoneNumber> p : m_phoneBook)
+		{
+			cout << p.first << "\t" << p.second << endl;
+		}
 	}
 };
 
@@ -156,6 +178,11 @@ void task_3()
 	pb.add(person3, pn3);
 	pb.add(person4, pn4);
 	pb.sortByName();
+	pb.print();
+	cout << "--------------------------" << endl;
+	pb.sortByPhone();
+	pb.print();
+	
 }
 
 int main()
