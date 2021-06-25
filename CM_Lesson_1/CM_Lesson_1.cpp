@@ -4,7 +4,8 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
-
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 // 1
@@ -127,7 +128,25 @@ private:
 	vector<pair<Person, PhoneNumber>> m_phoneBook;
 public:
 	PhoneBook() {}
-	PhoneBook(ifstream& ifs) {}
+	PhoneBook(ifstream& ifs) 
+	{
+		Person p;
+		PhoneNumber pn;
+		string s;
+		stringstream ss;
+		char buf[500];
+		int addNum = 0;
+		while (ifs)
+		{
+			//ifs >> p.lastName >> p.name >> p.middleName >> pn.countryCode >> pn.townCode;
+			ifs.getline(buf, 500);
+			s = string(buf);
+			ss << buf;
+			ss >> p.lastName >> p.name >> p.middleName >> pn.countryCode >> pn.townCode >> pn.number >> addNum;
+			ss.str("");
+			ss.clear();
+		}
+	}
 	
 	void sortByName()
 	{
@@ -163,26 +182,27 @@ public:
 
 void task_3()
 {
-	Person person4 = { "Ivanov", "Ivan", "Ivanovich" };
-	Person person2 = { "Petrov", "Petr", "Petrovich" };
-	Person person1 = { "Vasilyev", "Vasiliy", "Vasilyevich" };
-	Person person3 = { "Ivanov", "Ivan", "Ivanovich" };
-	PhoneNumber pn1 = { 7, 495, "1234567", 24 };
-	PhoneNumber pn2 = { 7, 499, "2223344" };
-	PhoneNumber pn3 = { 7, 487, "2345566" };
-	PhoneNumber pn4 = { 7, 800, "5556600" };
+	//Person person4 = { "Ivanov", "Ivan", "Ivanovich" };
+	//Person person2 = { "Petrov", "Petr", "Petrovich" };
+	//Person person1 = { "Vasilyev", "Vasiliy", "Vasilyevich" };
+	//Person person3 = { "Ivanov", "Ivan", "Ivanovich" };
+	//PhoneNumber pn1 = { 7, 495, "1234567", 24 };
+	//PhoneNumber pn2 = { 7, 499, "2223344" };
+	//PhoneNumber pn3 = { 7, 487, "2345566" };
+	//PhoneNumber pn4 = { 7, 800, "5556600" };
 
-	PhoneBook pb;
-	pb.add(person1, pn1);
-	pb.add(person2, pn2);
-	pb.add(person3, pn3);
-	pb.add(person4, pn4);
-	pb.sortByName();
-	pb.print();
-	cout << "--------------------------" << endl;
-	pb.sortByPhone();
-	pb.print();
-	
+	//PhoneBook pb;
+	//pb.add(person1, pn1);
+	//pb.add(person2, pn2);
+	//pb.add(person3, pn3);
+	//pb.add(person4, pn4);
+	//pb.sortByName();
+	//pb.print();
+	//cout << "--------------------------" << endl;
+	//pb.sortByPhone();
+	//pb.print();
+	ifstream file("Phonebook.txt");
+	PhoneBook pb(file);
 }
 
 int main()
