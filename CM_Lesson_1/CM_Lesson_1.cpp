@@ -139,7 +139,7 @@ public:
 		while (ifs)
 		{
 			//ifs >> p.lastName >> p.name >> p.middleName >> pn.countryCode >> pn.townCode;
-			ifs.getline(buf, 500);
+			ifs.getline(buf, 500, ',');
 			s = string(buf);
 			ss << buf;
 			ss >> p.lastName >> p.name >> p.middleName >> pn.countryCode >> pn.townCode >> pn.number >> addNum;
