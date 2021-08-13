@@ -201,13 +201,42 @@ void task_3()
 	//cout << "--------------------------" << endl;
 	//pb.sortByPhone();
 	//pb.print();
-	ifstream file("Phonebook.txt");
+	ifstream file("Phonebook.txt.txt");
 	PhoneBook pb(file);
 }
 
+
+vector<string> splitStr(const string& str, char sep)
+{
+	string substring = "";
+
+	const size_t sz = str.size();
+	size_t substrBeginPos = 0, substrEndPos = 0;
+	size_t separatorLen = 0;
+
+	vector<string> retVal;
+
+
+	while (substrBeginPos < sz)
+	{
+		separatorLen = (substrBeginPos == 0) ? 0 : 1;
+		substrEndPos = str.find(sep, substrBeginPos + separatorLen);
+		substring = str.substr(substrBeginPos + separatorLen, substrEndPos - substrBeginPos - separatorLen);
+		substrBeginPos = substrEndPos;
+		retVal.push_back(substring);
+	}
+
+	return retVal;
+}
+
+
+
 int main()
 {
-	task_1();
-	task_2();
-	task_3();
+	//task_1();
+	//task_2();
+	//task_3();
+	string s = "1,This,is,an,example,,";
+	vector<string> vec = splitStr(s, ',');
+
 }
