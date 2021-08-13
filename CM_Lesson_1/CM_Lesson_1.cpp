@@ -120,32 +120,63 @@ void task_2()
 // Реализуйте метод ChangePhoneNumber, который принимает человека и новый номер телефона и, если находит заданного человека в контейнере, 
 // то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
 //
+
+
+
+
+
 bool compareByName(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) { return p1.first < p2.first; }
 bool compareByPhone(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) { return p1.second < p2.second; }
 class PhoneBook
 {
 private:
 	vector<pair<Person, PhoneNumber>> m_phoneBook;
+	vector<string> splitStr(const string& str, char sep)
+	{
+		string substring = "";
+
+		const size_t sz = str.size();
+		size_t substrBeginPos = 0, substrEndPos = 0;
+		size_t separatorLen = 0;
+
+		vector<string> retVal;
+
+
+		while (substrBeginPos < sz)
+		{
+			separatorLen = (substrBeginPos == 0) ? 0 : 1;
+			substrEndPos = str.find(sep, substrBeginPos + separatorLen);
+			substring = str.substr(substrBeginPos + separatorLen, substrEndPos - substrBeginPos - separatorLen);
+			substrBeginPos = substrEndPos;
+			retVal.push_back(substring);
+		}
+
+		return retVal;
+	}
 public:
 	PhoneBook() {}
 	PhoneBook(ifstream& ifs) 
 	{
 		Person p;
 		PhoneNumber pn;
-		string s;
-		stringstream ss;
 		char buf[500];
-		int addNum = 0;
-		while (ifs)
+		vector<string> vec;
+		
+		do
 		{
-			//ifs >> p.lastName >> p.name >> p.middleName >> pn.countryCode >> pn.townCode;
-			ifs.getline(buf, 500, ',');
-			s = string(buf);
-			ss << buf;
-			ss >> p.lastName >> p.name >> p.middleName >> pn.countryCode >> pn.townCode >> pn.number >> addNum;
-			ss.str("");
-			ss.clear();
-		}
+			ifs.getline(buf, 500);
+			vec = splitStr(string(buf), ',');
+			p.lastName = vec[0];
+			p.name = vec[1];
+			p.middleName = vec[2];
+			pn.countryCode = stoi(vec[3]);
+			pn.townCode = stoi(vec[4]);
+			pn.number = vec[5];
+			if (vec[6] != "")
+				pn.additionalNumber = stoi(vec[6]);
+
+			add(p, pn);
+		} while (ifs);
 	}
 	
 	void sortByName()
@@ -201,33 +232,11 @@ void task_3()
 	//cout << "--------------------------" << endl;
 	//pb.sortByPhone();
 	//pb.print();
-	ifstream file("Phonebook.txt.txt");
+	ifstream file("Phonebook1.txt");
 	PhoneBook pb(file);
+	pb.print();
 }
 
-
-vector<string> splitStr(const string& str, char sep)
-{
-	string substring = "";
-
-	const size_t sz = str.size();
-	size_t substrBeginPos = 0, substrEndPos = 0;
-	size_t separatorLen = 0;
-
-	vector<string> retVal;
-
-
-	while (substrBeginPos < sz)
-	{
-		separatorLen = (substrBeginPos == 0) ? 0 : 1;
-		substrEndPos = str.find(sep, substrBeginPos + separatorLen);
-		substring = str.substr(substrBeginPos + separatorLen, substrEndPos - substrBeginPos - separatorLen);
-		substrBeginPos = substrEndPos;
-		retVal.push_back(substring);
-	}
-
-	return retVal;
-}
 
 
 
@@ -235,8 +244,8 @@ int main()
 {
 	//task_1();
 	//task_2();
-	//task_3();
-	string s = "1,This,is,an,example,,";
-	vector<string> vec = splitStr(s, ',');
+	task_3();
+	//string s = "1,This,is,an,example,,";
+	//vector<string> vec = splitStr(s, ',');
 
 }
