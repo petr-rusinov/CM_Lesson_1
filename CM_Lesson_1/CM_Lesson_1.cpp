@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 // 1
@@ -25,7 +26,7 @@ struct Person
 
 ostream& operator << (ostream& out, const Person& person)
 {
-	out << person.lastName << " " << person.name << " " << person.middleName;
+	out << setw(11) << person.lastName << " " << setw(10) << person.name << " " << setw(14) << person.middleName;
 	return out;
 }
 
@@ -161,21 +162,26 @@ public:
 		PhoneNumber pn;
 		char buf[500];
 		vector<string> vec;
+		string s = "";
 		
 		do
 		{
 			ifs.getline(buf, 500);
-			vec = splitStr(string(buf), ',');
-			p.lastName = vec[0];
-			p.name = vec[1];
-			p.middleName = vec[2];
-			pn.countryCode = stoi(vec[3]);
-			pn.townCode = stoi(vec[4]);
-			pn.number = vec[5];
-			if (vec[6] != "")
-				pn.additionalNumber = stoi(vec[6]);
+			s = string(buf);
+			if (s != "")
+			{
+				vec = splitStr(s, ',');
+				p.lastName = vec[0];
+				p.name = vec[1];
+				p.middleName = vec[2];
+				pn.countryCode = stoi(vec[3]);
+				pn.townCode = stoi(vec[4]);
+				pn.number = vec[5];
+				if (vec[6] != "")
+					pn.additionalNumber = stoi(vec[6]);
 
-			add(p, pn);
+				add(p, pn);
+			}
 		} while (ifs);
 	}
 	
@@ -235,6 +241,13 @@ void task_3()
 	ifstream file("Phonebook1.txt");
 	PhoneBook pb(file);
 	pb.print();
+	cout << "------SortByPhone-------" << endl;
+	pb.sortByPhone();
+	pb.print();
+	cout << "------SortByName-------" << endl;
+	pb.sortByName();
+	pb.print();
+
 }
 
 
