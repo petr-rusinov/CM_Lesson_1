@@ -123,10 +123,6 @@ void task_2()
 // то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
 //
 
-
-
-
-
 bool compareByName(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) { return p1.first < p2.first; }
 bool compareByPhone(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) { return p1.second < p2.second; }
 class PhoneBook
@@ -136,13 +132,10 @@ private:
 	vector<string> splitStr(const string& str, char sep)
 	{
 		string substring = "";
-
 		const size_t sz = str.size();
 		size_t substrBeginPos = 0, substrEndPos = 0;
 		size_t separatorLen = 0;
-
 		vector<string> retVal;
-
 
 		while (substrBeginPos < sz)
 		{
@@ -220,7 +213,7 @@ public:
 
 	void changePhoneNumber(const Person& p, const PhoneNumber& pn)
 	{
-		vector< pair<Person, PhoneNumber>>::iterator it = find_if(m_phoneBook.begin(), m_phoneBook.end(), [p](pair<Person, PhoneNumber> rec)
+		vector< pair<Person, PhoneNumber>>::iterator it = find_if(m_phoneBook.begin(), m_phoneBook.end(), [&p](pair<Person, PhoneNumber> rec)
 			{ 
 				return (rec.first == p);
 			});
