@@ -132,7 +132,7 @@ bool compareByPhone(pair<Person, PhoneNumber> p1, pair<Person, PhoneNumber> p2) 
 class PhoneBook
 {
 private:
-	vector<pair<Person, PhoneNumber>> m_phoneBook;
+	
 	vector<string> splitStr(const string& str, char sep)
 	{
 		string substring = "";
@@ -155,8 +155,9 @@ private:
 
 		return retVal;
 	}
+protected:
+	vector<pair<Person, PhoneNumber>> m_phoneBook;
 public:
-	//PhoneBook() {}
 	PhoneBook(ifstream& ifs) 
 	{
 		Person p;
@@ -180,6 +181,8 @@ public:
 				pn.number = vec[5];
 				if (vec[6] != "")
 					pn.additionalNumber = stoi(vec[6]);
+				else
+					pn.additionalNumber = nullopt;
 
 				add(p, pn);
 			}
@@ -194,26 +197,38 @@ public:
 	{
 		sort(m_phoneBook.begin(), m_phoneBook.end(), compareByPhone);
 	}
-	// Реализуйте метод GetPhoneNumber, который принимает фамилию человека, а возвращает кортеж из строки и PhoneNumber.
-	// Строка должна быть пустой, если найден ровно один человек с заданном фамилией в списке.
-	// Если не найден ни один человек с заданной фамилией, то в строке должна быть запись «not found», если было найдено 
-	// больше одного человека, то в строке должно быть «found more than 1».
-	// Для прохода по элементам контейнера используйте алгоритмическую функцию for_each.
 
-	/*tuple<string, PhoneNumber> */void getPhoneNumber(const string& lastName)
+	tuple<string, PhoneNumber> getPhoneNumber(const string& lastName)
 	{
-		//vector<string> foundPerson;
-		//auto comparePerson = []() { };
-		//for_each(m_phoneBook.begin(), m_phoneBook.end(), comparePerson);
-		//return make_tuple();
+		int i = 0;
+		string outString = "";
+		for_each(m_phoneBook.begin(), m_phoneBook.end(), [&lastName, &i](pair<Person, PhoneNumber> rec)
+			{
+				if (rec.first.lastName == lastName)
+					i++;
+			});
+		if (i == 1)
+			outString = "";
+		else if (i > 1)
+			outString = "found more than 1";
+		else if (i == 0)
+			outString = "not found";
+		else
+			outString = "unknown error";
+		return make_tuple(outString, PhoneNumber{ 1, 123, "1112233", nullopt });
 	}
-
-	// Реализуйте метод ChangePhoneNumber, который принимает человека и новый номер телефона и, если находит заданного человека в контейнере, 
-	// то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
 
 	void changePhoneNumber(const Person& p, const PhoneNumber& pn)
 	{
+		vector< pair<Person, PhoneNumber>>::iterator it = find_if(m_phoneBook.begin(), m_phoneBook.end(), [p](pair<Person, PhoneNumber> rec)
+			{ 
+				return (rec.first == p);
+			});
 
+		if (it != m_phoneBook.end())
+		{
+			(*it).second = pn;
+		}
 	}
 	void add(const Person& p, const PhoneNumber& pn)
 	{
@@ -228,31 +243,61 @@ public:
 			cout << p.first << "\t" << p.second << endl;
 		}
 	}
+	friend ostream& operator << (ostream& out, const PhoneBook& pn);
 };
+
+ostream& operator << (ostream& out, const PhoneBook& pn)
+{
+	for (pair<Person, PhoneNumber> p : pn.m_phoneBook)
+	{
+		cout << p.first << "\t" << p.second << endl;
+	}
+	return out;
+}
 
 
 void task_3()
 {
-	ifstream file("Phonebook1.txt");
-	PhoneBook pb(file);
-	pb.print();
+
+	ifstream file("Phonebook1.txt"); // путь к файлу PhoneBook.txt
+	PhoneBook book(file);
+	cout << book;
+
 	cout << "------SortByPhone-------" << endl;
-	pb.sortByPhone();
-	pb.print();
-	cout << "------SortByName-------" << endl;
-	pb.sortByName();
-	pb.print();
+	book.sortByPhone();
+	cout << book;
+
+	cout << "------SortByName--------" << endl;
+	book.sortByName();
+	cout << book;
+
+	cout << "-----GetPhoneNumber-----" << endl;
+	// лямбда функция, которая принимает фамилию и выводит номер телефона этого        человека, либо строку с ошибкой
+	auto print_phone_number = [&book](const string& surname) {
+		cout << surname << "\t";
+		auto answer = book.getPhoneNumber(surname);
+		if (get<0>(answer).empty())
+			cout << get<1>(answer);
+		else
+			cout << get<0>(answer);
+		cout << endl;
+	};
+
+	// вызовы лямбды
+	print_phone_number("Ivanov");
+	print_phone_number("Petrov");
+
+	cout << "----ChangePhoneNumber----" << endl;
+	book.changePhoneNumber(Person{ "Kotov", "Vasilii", "Eliseevich" }, PhoneNumber{ 7, 123, "15344458", nullopt });
+	book.changePhoneNumber(Person{ "Mironova", "Margarita", "Vladimirovna" }, PhoneNumber{ 16, 465, "9155448", 13 });
+	cout << book;
+
 
 }
-
-
-
 
 int main()
 {
 	//task_1();
-	task_2();
+	//task_2();
 	task_3();
-
-
 }
