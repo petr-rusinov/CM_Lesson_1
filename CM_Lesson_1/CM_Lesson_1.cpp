@@ -82,8 +82,8 @@ ostream& operator << (ostream& out, const PhoneNumber& pn)
 {
 	out << "+" << pn.countryCode << "(" << pn.townCode << ")" << pn.number;
 
-	if (pn.additionalNumber.has_value())
-		out << " "  << pn.additionalNumber.value();
+	if (pn.additionalNumber)
+		out << " "  <<*pn.additionalNumber;
 	return out;
 }
 
@@ -116,7 +116,8 @@ void task_2()
 // Реализуйте метод GetPhoneNumber, который принимает фамилию человека, а возвращает кортеж из строки и PhoneNumber.
 // Строка должна быть пустой, если найден ровно один человек с заданном фамилией в списке.
 // Если не найден ни один человек с заданной фамилией, то в строке должна быть запись «not found», если было найдено 
-// больше одного человека, то в строке должно быть «found more than 1».Для прохода по элементам контейнера используйте алгоритмическую функцию for_each.
+// больше одного человека, то в строке должно быть «found more than 1».
+// Для прохода по элементам контейнера используйте алгоритмическую функцию for_each.
 // 
 // Реализуйте метод ChangePhoneNumber, который принимает человека и новый номер телефона и, если находит заданного человека в контейнере, 
 // то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
@@ -155,7 +156,7 @@ private:
 		return retVal;
 	}
 public:
-	PhoneBook() {}
+	//PhoneBook() {}
 	PhoneBook(ifstream& ifs) 
 	{
 		Person p;
@@ -193,10 +194,23 @@ public:
 	{
 		sort(m_phoneBook.begin(), m_phoneBook.end(), compareByPhone);
 	}
-	string getPhoneNumber(const string& lastName)
+	// Реализуйте метод GetPhoneNumber, который принимает фамилию человека, а возвращает кортеж из строки и PhoneNumber.
+	// Строка должна быть пустой, если найден ровно один человек с заданном фамилией в списке.
+	// Если не найден ни один человек с заданной фамилией, то в строке должна быть запись «not found», если было найдено 
+	// больше одного человека, то в строке должно быть «found more than 1».
+	// Для прохода по элементам контейнера используйте алгоритмическую функцию for_each.
+
+	/*tuple<string, PhoneNumber> */void getPhoneNumber(const string& lastName)
 	{
-		return "";
+		//vector<string> foundPerson;
+		//auto comparePerson = []() { };
+		//for_each(m_phoneBook.begin(), m_phoneBook.end(), comparePerson);
+		//return make_tuple();
 	}
+
+	// Реализуйте метод ChangePhoneNumber, который принимает человека и новый номер телефона и, если находит заданного человека в контейнере, 
+	// то меняет его номер телефона на новый, иначе ничего не делает.Используйте алгоритмическую функцию find_if.
+
 	void changePhoneNumber(const Person& p, const PhoneNumber& pn)
 	{
 
@@ -219,25 +233,6 @@ public:
 
 void task_3()
 {
-	//Person person4 = { "Ivanov", "Ivan", "Ivanovich" };
-	//Person person2 = { "Petrov", "Petr", "Petrovich" };
-	//Person person1 = { "Vasilyev", "Vasiliy", "Vasilyevich" };
-	//Person person3 = { "Ivanov", "Ivan", "Ivanovich" };
-	//PhoneNumber pn1 = { 7, 495, "1234567", 24 };
-	//PhoneNumber pn2 = { 7, 499, "2223344" };
-	//PhoneNumber pn3 = { 7, 487, "2345566" };
-	//PhoneNumber pn4 = { 7, 800, "5556600" };
-
-	//PhoneBook pb;
-	//pb.add(person1, pn1);
-	//pb.add(person2, pn2);
-	//pb.add(person3, pn3);
-	//pb.add(person4, pn4);
-	//pb.sortByName();
-	//pb.print();
-	//cout << "--------------------------" << endl;
-	//pb.sortByPhone();
-	//pb.print();
 	ifstream file("Phonebook1.txt");
 	PhoneBook pb(file);
 	pb.print();
@@ -256,9 +251,8 @@ void task_3()
 int main()
 {
 	//task_1();
-	//task_2();
+	task_2();
 	task_3();
-	//string s = "1,This,is,an,example,,";
-	//vector<string> vec = splitStr(s, ',');
+
 
 }
