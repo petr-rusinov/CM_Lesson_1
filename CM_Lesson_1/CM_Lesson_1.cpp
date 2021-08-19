@@ -195,10 +195,15 @@ public:
 	{
 		int i = 0;
 		string outString = "";
-		for_each(m_phoneBook.begin(), m_phoneBook.end(), [&lastName, &i](pair<Person, PhoneNumber> rec)
+		int found = -1;
+		PhoneNumber pn;
+		for_each(m_phoneBook.begin(), m_phoneBook.end(), [&lastName, &i, &pn](pair<Person, PhoneNumber> rec)
 			{
 				if (rec.first.lastName == lastName)
+				{
 					i++;
+					pn = rec.second;
+				}
 			});
 		if (i == 1)
 			outString = "";
@@ -208,7 +213,7 @@ public:
 			outString = "not found";
 		else
 			outString = "unknown error";
-		return make_tuple(outString, PhoneNumber{ 1, 123, "1112233", nullopt });
+		return make_tuple(outString, pn);
 	}
 
 	void changePhoneNumber(const Person& p, const PhoneNumber& pn)
