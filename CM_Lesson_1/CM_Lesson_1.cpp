@@ -195,7 +195,6 @@ public:
 	{
 		int i = 0;
 		string outString = "";
-		int found = -1;
 		PhoneNumber pn;
 		for_each(m_phoneBook.begin(), m_phoneBook.end(), [&lastName, &i, &pn](pair<Person, PhoneNumber> rec)
 			{
